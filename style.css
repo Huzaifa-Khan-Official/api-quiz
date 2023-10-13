@@ -1,0 +1,103 @@
+body {
+    padding: 10px;
+    background-color: #f7f1ea;
+}
+
+body>.container {
+    padding: 1vw;
+    background-color: #ffffff;
+    border-radius: 18px;
+}
+
+.timerDiv {
+    text-align: right;
+    padding-right: 4vw;
+    margin-top: 4vh;
+}
+
+.resultDiv {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: green;
+}
+
+.resultDiv hr {
+    width: 100%;
+    color: black;
+    margin-top: 50px;
+}
+
+.totalQuestionDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 4vh;
+    color: rgb(0, 106, 255);
+}
+
+.buttonsDiv {
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 10px;
+}
+
+.buttonsDiv button {
+    background-color: #ffe6bc !important;
+    color: black !important;
+    border: none !important;
+    opacity: 1 !important;
+    padding: 10px 30px;
+}
+
+.buttonsDiv button:hover {
+    background-color: #f5d091 !important;
+}
+
+.form-check {
+    background-color: #f7f1ea;
+    padding: 15px 20px 15px 35px;
+    border-radius: 10px;
+    margin-bottom: 4vh;
+}
+
+.form-check label {
+    word-break: break-word;
+}
+
+.form-check:hover {
+    background-color: #e5dace;
+}
+
+.checkedDiv{
+    border: 2px solid black !important;
+}
+
+.copyright {
+    position: fixed !important;
+    bottom: 10px;
+    right: 10px;
+    text-align: end;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+}
+
+.copyright p {
+    margin-bottom: 0px;
+}
+
+.optionsDiv {
+    padding: 10px;
+}
+
+.question {
+    padding: 10px;
+}
+
+.content {
+    padding: 10px;
+}
