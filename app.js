@@ -1,3 +1,5 @@
+let contentDiv = document.querySelector(".content");
+let confirmationDiv = document.querySelector(".confirmationDiv");
 let questionsArray; // Declare a variable to store the fetched data
 let questionElement = document.querySelector("#question"); // get the element to show question
 let nextBtn = document.getElementById("nextBtn"); // get the nextBtn
@@ -17,6 +19,15 @@ let optDiv0 = document.querySelector(".optDiv0"); // get div of option 1
 let optDiv1 = document.querySelector(".optDiv1"); // get div of option 2
 let optDiv2 = document.querySelector(".optDiv2"); // get div of option 3
 let optDiv3 = document.querySelector(".optDiv3"); // get div of option 4
+let timerDiv = document.querySelector(".timerDiv"); // get timer div
+timerDiv.style.display = "none"
+let marks = 0;
+let percentage = 0;
+
+let timer = document.getElementById("timer");
+let interval;
+
+let questionsLength = "";
 
 fetch('https://opentdb.com/api.php?amount=10')
     .then(response => response.json())
@@ -34,8 +45,35 @@ function myFunction(data) {
     let questionIndex = 0;
     let currentQuestion = data[questionIndex].question // current question
 
+    questionsLength = data.length
+
+    function startTimer() {
+        var min = questionsLength - 1;
+        var sec = 59;
+
+        timer.innerHTML = "";
+        interval = setInterval(() => {
+            timer.innerHTML = `${min} : ${sec}`;
+            sec--;
+            if (sec < 0) {
+                min--;
+                sec = 59;
+                if (min < 0) {
+                    sec = 59;
+                    showResult()
+                }
+            }
+        }, 1000);
+    }
+
 
     nextBtn.addEventListener("click", () => {
+        timerDiv.style.display = "block";
+        confirmationDiv.style.display = "none";
+
+
+        startTimer();
+
         optionsDiv.style.display = "block";
         questionDiv.style.display = "block";
         nextBtn.innerText = "Next"
@@ -43,7 +81,13 @@ function myFunction(data) {
 
 
         var checkbox = document.querySelectorAll('.form-check-input');
-        for(var i =0; i < checkbox.length; i++) {
+        for (var i = 0; i < checkbox.length; i++) {
+            if (checkbox[i].checked) {
+                let selectedValue = checkbox[i].value;
+                let selectedOption = data[questionIndex - 1].incorrect_answers[selectedValue];
+                let correctedAnswer = data[questionIndex - 1].correct_answer;
+                checkAnswer(selectedOption, correctedAnswer);
+            }
             checkbox[i].checked = false;
         }
 
@@ -53,7 +97,7 @@ function myFunction(data) {
         }
 
         if (questionIndex >= data.length) {
-            console.log("Khatam");
+            showResult();
         } else {
             optDiv0.style.border = "none"
             optDiv1.style.border = "none"
@@ -66,6 +110,7 @@ function myFunction(data) {
             let optionsArr = data[questionIndex].incorrect_answers
             let correctAns = data[questionIndex].correct_answer
             optionsArr.push(correctAns)
+            optionsArr.sort(() => Math.random() - 0.5)
 
 
             nextBtn.disabled = true;
@@ -90,9 +135,7 @@ function myFunction(data) {
         }
 
     })
-
 }
-
 
 function clicked() {
     nextBtn.disabled = false;
@@ -127,3 +170,34 @@ function clickedDiv(divNo) {
 
     nextBtn.disabled = false;
 }
+
+
+function checkAnswer(slectedOption, correctAnswer) {
+    if (slectedOption == correctAnswer) {
+        marks++
+        percentage = Math.ceil((marks / questionsLength) * 100);
+    }
+}
+
+
+function showResult() {
+    clearInterval(interval);
+    timer.innerHTML = "";
+    contentDiv.innerHTML = "";
+    var resultDiv = document.querySelector(".resultDiv");
+    resultDiv.style.display = "flex";
+    document.querySelector("#totalQues").innerHTML = questionsLength;
+    document.querySelector("#correctAns").innerHTML = marks;
+
+    if (percentage >= 70) {
+        resultDiv.style.color = "green"
+        document.querySelector("#feedback").innerHTML = `Congratulations, `;
+        document.querySelector("#feedback2").innerHTML = "you passed";
+        document.querySelector("#percen").innerHTML = `${percentage}%`;
+    } else {
+        resultDiv.style.color = "red";
+        document.querySelector("#feedback").innerHTML = `Sorry, `;
+        document.querySelector("#feedback2").innerHTML = "you failed";
+        document.querySelector("#percen").innerHTML = `${percentage}%`;
+    }
+};
