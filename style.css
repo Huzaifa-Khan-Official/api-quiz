@@ -70,7 +70,7 @@ body>.container {
     background-color: #e5dace;
 }
 
-.checkedDiv{
+.checkedDiv {
     border: 2px solid black !important;
 }
 
@@ -92,10 +92,12 @@ body>.container {
 
 .optionsDiv {
     padding: 10px;
+    display: none;
 }
 
 .question {
     padding: 10px;
+    display: none;
 }
 
 .content {
