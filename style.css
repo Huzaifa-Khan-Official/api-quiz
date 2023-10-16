@@ -45,6 +45,10 @@ body>.container {
     border-radius: 10px;
 }
 
+.buttonsDiv.nextBtn {
+    margin-top: -25px;
+}
+
 .buttonsDiv button {
     background-color: #ffe6bc !important;
     color: black !important;
@@ -104,4 +108,8 @@ body>.container {
 
 .content {
     padding: 10px;
+}
+
+#nextBtn {
+    display: none;
 }

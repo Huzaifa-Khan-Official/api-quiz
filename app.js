@@ -3,7 +3,7 @@ let confirmationDiv = document.querySelector(".confirmationDiv");
 let questionsArray; // Declare a variable to store the fetched data
 let questionElement = document.querySelector("#question"); // get the element to show question
 let nextBtn = document.getElementById("nextBtn"); // get the nextBtn
-
+let startQuiz = document.getElementById("startQuiz"); // get the startQuiz
 
 let questionDiv = document.querySelector(".question") // get the question div
 let optionsDiv = document.querySelector(".optionsDiv") // get the parent of all options
@@ -40,7 +40,6 @@ fetch('https://opentdb.com/api.php?amount=10')
         console.error("Fetch error:", error);
     });
 
-
 function myFunction(data) {
     let questionIndex = 0;
     let currentQuestion = data[questionIndex].question // current question
@@ -48,37 +47,41 @@ function myFunction(data) {
     questionsLength = data.length
 
     function startTimer() {
-        var min = questionsLength - 1;
-        var sec = 59;
-
-        timer.innerHTML = "";
-        interval = setInterval(() => {
-            timer.innerHTML = `${min} : ${sec}`;
-            sec--;
-            if (sec < 0) {
-                min--;
-                sec = 59;
-                if (min < 0) {
+            var min = questionsLength - 1;
+            var sec = 59;
+        
+            timer.innerHTML = "";
+            interval = setInterval(() => {
+                timer.innerHTML = `${Math.abs(min)} : ${sec}`;
+                sec--;
+                if (sec < 0) {
+                    min--;
                     sec = 59;
-                    showResult()
+                    if (min < 0) {
+                        sec = 59;
+                        showResult();
+                    }
                 }
-            }
-        }, 1000);
-    }
+            }, 1000);
+        }
+        
+    startQuiz.addEventListener("click", () => {
+        nextQuestion();
+        startTimer()
+    })
 
+    nextBtn.addEventListener("click", () => { 
+        nextQuestion() 
+    });
 
-    nextBtn.addEventListener("click", () => {
+    function nextQuestion() {
         timerDiv.style.display = "block";
         confirmationDiv.style.display = "none";
-
-
-        startTimer();
+        startQuiz.style.display = "none";
+        nextBtn.style.display = "block";
 
         optionsDiv.style.display = "block";
         questionDiv.style.display = "block";
-        nextBtn.innerText = "Next"
-
-
 
         var checkbox = document.querySelectorAll('.form-check-input');
         for (var i = 0; i < checkbox.length; i++) {
@@ -90,7 +93,6 @@ function myFunction(data) {
             }
             checkbox[i].checked = false;
         }
-
 
         if (questionIndex == data.length - 1) {
             nextBtn.innerText = "Submit";
@@ -111,7 +113,6 @@ function myFunction(data) {
             let correctAns = data[questionIndex].correct_answer
             optionsArr.push(correctAns)
             optionsArr.sort(() => Math.random() - 0.5)
-
 
             nextBtn.disabled = true;
 
@@ -134,7 +135,11 @@ function myFunction(data) {
             questionIndex++
         }
 
-    })
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+    }
 }
 
 function clicked() {
@@ -178,7 +183,6 @@ function checkAnswer(slectedOption, correctAnswer) {
         percentage = Math.ceil((marks / questionsLength) * 100);
     }
 }
-
 
 function showResult() {
     clearInterval(interval);
